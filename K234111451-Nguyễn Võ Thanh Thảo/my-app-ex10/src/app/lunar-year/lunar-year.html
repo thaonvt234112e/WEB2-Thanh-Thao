@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="card">
+    <h2>🌙 Chuyển đổi Dương lịch → Âm lịch</h2>
+
+    <div class="select-group">
+      <div class="select-item">
+        <label>Ngày</label>
+        <select [(ngModel)]="day">
+          <option *ngFor="let d of days" [value]="d">{{ d }}</option>
+        </select>
+      </div>
+
+      <div class="select-item">
+        <label>Tháng</label>
+        <select [(ngModel)]="month">
+          <option *ngFor="let m of months" [value]="m">{{ m }}</option>
+        </select>
+      </div>
+
+      <div class="select-item">
+        <label>Năm</label>
+        <select [(ngModel)]="year">
+          <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn" (click)="convert()">Chuyển đổi</button>
+
+    <div class="result" *ngIf="result">
+      <h3>Kết quả</h3>
+      <p>{{ result }}</p>
+    </div>
+  </div>
+</div>
