@@ -1,0 +1,17 @@
+<p>ex13 works!</p>
+<table>
+    <tr>
+        <th>Product ID</th>
+        <th>Product Name</th>
+        <th>Unit Price</th>
+        <th>Picture</th>
+        <th>#</th>
+    </tr>
+    <tr *ngFor="let p of products">
+        <td>{{p.ProductId}}</td>
+        <td>{{p.ProductName}}</td>
+        <td>{{p.Price}}</td>
+        <td><img [src]="p.image" alt="{{p.ProductName}}"></td>
+        <td><button (click)="viewDetails(p.ProductId)">View Details</button></td>
+    </tr>
+</table>
