@@ -1,0 +1,29 @@
+<p>ex14 works!</p>
+<table border="1" *ngFor="let c of cate">
+    <tr>
+        <th>Ma Danh Muc</th>
+        <th>Ten Danh Muc</th>
+    </tr> 
+    <tr>
+        <td>{{c.Cateid}}</td>
+        <td>{{c.CateName}}</td>
+    </tr>
+    <tr >
+        <td colspan="2">
+        <table>
+            <tr>
+                <th>Ma San Pham</th>
+                <th>Ten San Pham</th>
+                <th>Gia San Pham</th>
+                <th>Hinh Anh</th>
+            </tr>
+            <tr *ngFor="let p of c.Products">
+                <td>{{p.ProductId}}</td>
+                <td>{{p.ProductName}}</td>
+                <td>{{p.Price}}</td>
+                <td><img [src]="p.Image" width="50"></td>
+            </tr>
+        </table>
+        </td>
+    </tr>   
+</table>
