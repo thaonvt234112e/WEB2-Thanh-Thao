@@ -1,0 +1,22 @@
+<p>ex18 works!</p>
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Age</th>
+        <th>#</th>
+    </tr>
+    <ng-container *ngFor="let customerType of customers">
+        <tr>
+            <td colspan="5"><strong>{{customerType.CustomerTypeId}} - {{customerType.CustomterTypeName}}</strong></td>
+        </tr>
+        <tr *ngFor="let c of customerType.Customers">
+            <td>{{c.Id}}</td>
+            <td>{{c.Name}}</td>
+            <td>{{c.Email}}</td>
+            <td>{{c.Age}}</td>
+            <td><img src="{{c.ImageUrl}}" alt="{{c.Name}}"></td>
+        </tr>
+    </ng-container>
+</table>
