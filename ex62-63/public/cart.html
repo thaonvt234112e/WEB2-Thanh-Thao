@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopping Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background: #f7f7f7;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #f0f0f0;
+    }
+
+    img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+    }
+
+    input[type="number"] {
+      width: 60px;
+      padding: 5px;
+    }
+
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn {
+      text-decoration: none;
+      border: none;
+      padding: 10px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      color: white;
+    }
+
+    .update-btn {
+      background: #2da7e8;
+    }
+
+    .continue-btn {
+      background: #999;
+    }
+
+    .total-box {
+      margin-top: 15px;
+      text-align: right;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Shopping cart</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Remove</th>
+        <th>Image</th>
+        <th>Product(s)</th>
+        <th>Price</th>
+        <th>Qty.</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="cartBody"></tbody>
+  </table>
+
+  <div class="total-box" id="grandTotal">Grand Total: $0</div>
+
+  <div class="actions">
+    <button class="btn update-btn" onclick="updateCart()">Update shopping cart</button>
+    <a class="btn continue-btn" href="/products.html">Continue shopping</a>
+  </div>
+
+  <script>
+    let cartItems = [];
+
+    async function loadCart() {
+      const response = await fetch("/cart");
+      const result = await response.json();
+
+      cartItems = result.items;
+
+      const cartBody = document.getElementById("cartBody");
+      cartBody.innerHTML = "";
+
+      if (cartItems.length === 0) {
+        cartBody.innerHTML = `
+          <tr>
+            <td colspan="6">Your cart is empty</td>
+          </tr>
+        `;
+      } else {
+        cartItems.forEach((item) => {
+          cartBody.innerHTML += `
+            <tr>
+              <td>
+                <input type="checkbox" class="remove-check" data-id="${item.productId}" />
+              </td>
+              <td>
+                <img src="${item.image}" alt="${item.name}" />
+              </td>
+              <td>${item.name}</td>
+              <td>$${item.price}</td>
+              <td>
+                <input type="number" min="1" value="${item.quantity}" class="qty-input" data-id="${item.productId}" />
+              </td>
+              <td>$${item.total.toFixed(2)}</td>
+            </tr>
+          `;
+        });
+      }
+
+      document.getElementById("grandTotal").innerText =
+        "Grand Total: $" + result.grandTotal.toFixed(2);
+    }
+
+    async function updateCart() {
+      const qtyInputs = document.querySelectorAll(".qty-input");
+      const removeChecks = document.querySelectorAll(".remove-check");
+
+      const items = cartItems.map((item) => {
+        const qtyInput = [...qtyInputs].find((x) => x.dataset.id === item.productId);
+        const removeCheck = [...removeChecks].find((x) => x.dataset.id === item.productId);
+
+        return {
+          productId: item.productId,
+          quantity: parseInt(qtyInput.value),
+          remove: removeCheck.checked
+        };
+      });
+
+      const response = await fetch("/cart/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ items: items })
+      });
+
+      const result = await response.json();
+      alert(result.message);
+      loadCart();
+    }
+
+    loadCart();
+  </script>
+</body>
+</html>
