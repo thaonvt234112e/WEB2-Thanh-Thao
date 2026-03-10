@@ -1,0 +1,59 @@
+<nav class="navbar">
+  <a class="navbar-brand" routerLink="/shopping">
+    <span class="brand-icon">🐼</span>
+    Panda Store
+  </a>
+
+  <div class="nav-menu">
+    <!-- Shopping -->
+    <a routerLink="/shopping" routerLinkActive="active" class="nav-link">
+      🛍️ Shopping
+    </a>
+
+    <!-- Cart Dropdown -->
+    <div class="dropdown" (mouseenter)="cartDropdownOpen=true" (mouseleave)="cartDropdownOpen=false">
+      <a class="nav-cart" routerLink="/cart">
+        🛒 Cart
+        @if(cartService.getCount() > 0) {
+        <span class="badge">{{ cartService.getCount() }}</span>
+        }
+      </a>
+      @if(cartDropdownOpen) {
+      <div class="dropdown-menu">
+        <div class="dropdown-menu-inner">
+          <a class="dropdown-item" routerLink="/cart" (click)="cartDropdownOpen=false">🛒 Current Cart</a>
+          @if(authService.isEmployee()) {
+          <a class="dropdown-item" routerLink="/revenue" (click)="cartDropdownOpen=false">📊 Revenue Statistics</a>
+          <a class="dropdown-item" routerLink="/vip" (click)="cartDropdownOpen=false">⭐ VIP Customers</a>
+          }
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Welcome X (Q13) -->
+    @if(authService.isLoggedIn()) {
+    <div class="welcome-user">
+      <span>👋 Welcome, <strong>{{ getUser()?.name }}</strong></span>
+      <button class="btn-logout" (click)="logout()">✕ Logout</button>
+    </div>
+    } @else {
+    <a routerLink="/login" class="nav-link">🔑 Login</a>
+    }
+  </div>
+</nav>
+
+<!-- Part C: Router Outlet -->
+<div class="page-content">
+  <router-outlet />
+</div>
+
+<!-- Part A: Student Card - di chuyển lên xuống (bounce animation) -->
+<div class="student-card">
+  <div class="student-avatar">🎓</div>
+  <div class="student-info">
+    <div class="student-id">MSSV: K234111451</div>
+    <div class="student-name">Nguyễn Võ Thanh Thảo</div>
+    <div class="student-id">Lớp: K234112E</div>
+  </div>
+</div>
